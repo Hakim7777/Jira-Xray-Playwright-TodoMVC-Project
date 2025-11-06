@@ -17,8 +17,8 @@ Ce projet démontre un **cycle QA d'entreprise complet** appliqué à l'applicat
 Simuler un workflow QA professionnel couvrant tous les aspects : gestion des exigences, conception de tests, exécution manuelle et automatisation avec reporting.
 
 ### Application cible
-- **URL** : https://todomvc.com/examples/angular/
-- **Type** : Single Page Application (SPA) - Angular
+- **URL** : https://todomvc.com/examples/react/dist/
+- **Type** : Single Page Application (SPA) - React
 - **Domaine de test** : Gestion de tâches (CRUD, filtrage, persistance)
 
 ---
@@ -57,11 +57,12 @@ Simuler un workflow QA professionnel couvrant tous les aspects : gestion des exi
 │  ✓ Dashboards avec métriques                                   │
 │  ✓ Traces et vidéos d'erreurs                                  │
 ├─────────────────────────────────────────────────────────────────┤
-│  6. CI/CD - Jenkins (En préparation)                           │
+│  6. CI/CD - Jenkins                                             │
 ├─────────────────────────────────────────────────────────────────┤
-│  ⏳ Pipeline automatisé prévu                                   │
-│  ⏳ Intégration Xray + Jenkins                                  │
-│  ⏳ Notifications automatiques                                  │
+│  ✅ Pipeline automatisé fonctionnel                              │
+│  ✅ Exécution tests depuis GitHub                               │
+│  ✅ Rapports générés et archivés                                │
+│  ✅ Intégration continue active                                 │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -362,39 +363,46 @@ Feature: Ajouter une tâche
 
 ---
 
-## 🚀 CI/CD - Jenkins (Prochaine étape)
+## 🚀 CI/CD - Jenkins (Actif)
 
-### Pipeline prévu
+### Pipeline implémenté
 
-```yaml
-Pipeline:
-  1. Build : npm install
-  2. Setup : npx playwright install
-  3. Test  : npx playwright test
-  4. Report: Allure + HTML Reports
-  5. Notify: Email aux stakeholders
-  6. Archive: Résultats dans Xray
-```
+✅ **Stages opérationnels** :
+1. **Checkout** : Clone depuis GitHub (Jira-Xray-Playwright-TodoMVC-Project)
+2. **Install Dependencies** : `npm install` sur l'agent Jenkins
+3. **Install Browsers** : Télécharge Chromium & WebKit
+4. **Run Tests** : Exécute les 32 tests (16 scénarios × 2 navigateurs)
+5. **Generate Reports** : Crée les rapports Allure et Playwright
 
-### Commandes Jenkins
+### Configuration Jenkins
 
+**Job créé** : `todomvc-qa-automation`  
+**URL** : http://localhost:8080/job/todomvc-qa-automation/  
+**Repository** : https://github.com/Hakim7777/Jira-Xray-Playwright-TodoMVC-Project  
+**Branch** : main
+
+**Commandes exécutées** :
 ```groovy
 stage('Run Tests') {
   steps {
-    sh 'npm install'
-    sh 'npx playwright install'
-    sh 'npm test'
+    bat 'npm install'
+    bat 'npx playwright install chromium webkit'
+    bat 'npx playwright test --project=chromium --project=webkit'
   }
 }
 
-stage('Publish Reports') {
+stage('Generate Reports') {
   steps {
-    allure includeProperties: false,
-           jdk: '',
-           results: [[path: 'allure-results']]
+    bat 'npx allure generate allure-results --clean -o allure-report'
   }
 }
 ```
+
+### Résultats actuels
+- ✅ **Dernier build** : #6 SUCCESS
+- ✅ **Tests** : 32/32 PASSED (58.9s)
+- ✅ **Rapports** : Allure + Playwright HTML générés
+- ✅ **Artifacts** : Archivés pour historique
 
 ---
 
@@ -484,15 +492,18 @@ Les commentaires JSDoc aident à comprendre chaque action.
 
 ## 📋 Checklist d'exécution
 
-- [ ] Cloner le repository
-- [ ] Installer Node.js 20+
-- [ ] `npm install`
-- [ ] `npx playwright install chromium webkit`
-- [ ] `npm test` pour vérifier
-- [ ] `npm run test:ui` pour explorer
-- [ ] Vérifier les rapports HTML
-- [ ] Documenter les résultats
-- [ ] Intégrer à Jenkins (prochaine phase)
+- [x] Cloner le repository
+- [x] Installer Node.js 20+
+- [x] `npm install`
+- [x] `npx playwright install chromium webkit`
+- [x] `npm test` pour vérifier (32/32 PASSED ✅)
+- [x] `npm run test:ui` pour explorer
+- [x] Vérifier les rapports HTML
+- [x] Documenter les résultats
+- [x] Intégrer à Jenkins (FAIT ✅)
+- [x] GitHub repository (Jira-Xray-Playwright-TodoMVC-Project)
+- [x] Pipeline Jenkins automatisé
+- [x] Exécution continue des tests
 
 ---
 
@@ -519,17 +530,19 @@ Ce projet est fourni à titre d'exemple d'implémentation QA professionnelle.
 ✅ **Exécution manuelle** : Documentée et rapportée  
 ✅ **Automatisation** : Playwright + TypeScript (POM)  
 ✅ **Reporting** : Allure + HTML Reports  
-⏳ **CI/CD** : Jenkins (en préparation)  
+✅ **CI/CD** : Jenkins (OPÉRATIONNEL)  
 
 **Prochaines étapes** :
-1. Pipeline Jenkins
-2. Intégration Xray ↔ Jenkins
-3. Notifications automatiques
+1. ✅ Pipeline Jenkins - FAIT
+2. Intégration Xray ↔ Jenkins (optional)
+3. Notifications Slack/Email
 4. Tests visuels (Visual Regression)
-5. Optimisation des performances
+5. Performance testing
 
 ---
 
 **Dernière mise à jour** : Novembre 2025  
-**Version** : 1.0.0  
-**Status** : ✅ Production Ready
+**Version** : 1.1.0  
+**Status** : ✅ Production Ready - Jenkins Active  
+**Tests** : 32/32 PASSING ✅  
+**CI/CD** : Jenkins Pipeline Operational ✅
