@@ -7,10 +7,6 @@ pipeline {
     timestamps()
   }
 
-  triggers {
-    pollSCM('H/15 * * * *')
-  }
-
   stages {
     stage('Checkout') {
       steps {
