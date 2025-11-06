@@ -22,28 +22,28 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         echo '📦 Installation des dépendances...'
-        sh 'npm install'
+        bat 'npm install'
       }
     }
 
     stage('Install Browsers') {
       steps {
         echo '🌐 Installation des navigateurs Playwright...'
-        sh 'npx playwright install chromium webkit'
+        bat 'npx playwright install chromium webkit'
       }
     }
 
     stage('Run Tests') {
       steps {
         echo '🧪 Exécution des tests Playwright...'
-        sh 'npx playwright test --project=chromium --project=webkit'
+        bat 'npx playwright test --project=chromium --project=webkit'
       }
     }
 
     stage('Generate Allure Report') {
       steps {
         echo '📊 Génération du rapport Allure...'
-        sh 'npx allure generate allure-results --clean -o allure-report || true'
+        bat 'npx allure generate allure-results --clean -o allure-report'
       }
     }
 
